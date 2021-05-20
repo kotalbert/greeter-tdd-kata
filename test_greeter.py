@@ -17,3 +17,8 @@ class TestGreeter(unittest.TestCase):
     def test_greet_should_capitalize_input(self):
         actual = Greeter.greet('albert')
         self.assertEqual(actual, self.expected)
+
+    def test_greet_should_say_good_morning(self):
+        actual = Greeter.greet('Albert')
+        expected = 'Good morning Albert'
+        self.assertEqual(actual, expected)
