@@ -1,6 +1,11 @@
 import unittest
 
+from greeter import Greeter
+
 
 class TestGreeter(unittest.TestCase):
-    def test_something(self):
-        pass
+    def test_greet_should_say_hello(self):
+        actual = Greeter.greet('Albert')
+        expected = 'Hello Albert'
+        self.assertEqual(actual, expected)
+
