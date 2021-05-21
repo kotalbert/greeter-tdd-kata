@@ -37,3 +37,11 @@ class TestGreeter(unittest.TestCase):
         actual = Greeter.greet('Albert')
         expected = 'Good morning Albert'
         self.assertEqual(actual, expected)
+
+    def test_greet_should_say_good_evening_in_evening(self):
+        self.set_hour(20)
+        # todo: refactor name as class var
+        actual = Greeter.greet('Albert')
+        expected = 'Good evening Albert'
+        self.assertEqual(actual, expected)
+
