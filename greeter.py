@@ -1,8 +1,15 @@
+import time
+
+
 class Greeter:
     @staticmethod
     def greet(name: str) -> str:
-        name_trans = Greeter._transform_name(name)
-        return f'Hello {name_trans}'
+        name = Greeter._transform_name(name)
+        now_h = time.localtime().tm_hour
+        greeting = 'Hello'
+        if now_h in range(6, 13):
+            greeting = 'Good morning'
+        return f'{greeting} {name}'
 
     @staticmethod
     def _transform_name(name: str) -> str:
