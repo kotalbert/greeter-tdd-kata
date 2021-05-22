@@ -6,7 +6,7 @@ class Greeter:
     def greet(name: str) -> str:
         name = Greeter._transform_name(name)
         greeting = Greeter._get_greeting()
-
+        print(f'Called with name: {name}')
         return f'{greeting} {name}'
 
     @staticmethod
