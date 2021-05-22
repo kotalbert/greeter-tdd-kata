@@ -9,6 +9,8 @@ class Greeter:
         greeting = 'Hello'
         if now_h in range(6, 13):
             greeting = 'Good morning'
+        elif now_h in range(18, 23):
+            greeting = 'Good evening'
         return f'{greeting} {name}'
 
     @staticmethod
