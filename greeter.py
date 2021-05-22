@@ -26,10 +26,14 @@ class Greeter:
 
     @staticmethod
     def _get_current_hour() -> int:
+        # todo: refactor to get current time
         return time.localtime().tm_hour
 
     @staticmethod
     def _current_hour_between(range_start: int, range_end: int) -> bool:
+        # todo: refactor
+        #  fix function, the hours range is too long, eg. 22 - 6 should be 7 hours long
+        #  function should handle hour & minute time (seconds since midnight?)
         ch = Greeter._get_current_hour()
         for i in range(abs(range_start - range_end) + 1):
             if ((range_start + i) % 24) == ch:

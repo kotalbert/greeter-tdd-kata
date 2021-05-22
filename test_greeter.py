@@ -1,5 +1,6 @@
 import sys
 import unittest
+from typing import List
 from unittest.mock import patch
 
 from greeter import Greeter
@@ -25,15 +26,24 @@ class TestGreeter(unittest.TestCase):
     def set_hour(self, hour: int):
         """Helper to set mocked hour."""
 
+        # todo: add minute parameter
         self.current_hour.return_value = hour
+
+    @staticmethod
+    def get_hours_between(start, stop) -> List[int]:
+        return list(range(start, stop + 1))
 
     def test_greet_should_say_hello(self):
         """
         Greeter.greet should say 'Hello'
         """
 
-        actual = self.greet()
-        self.assertEqual(actual, self.hello)
+        hours = TestGreeter.get_hours_between(14, 17)
+        for hour in hours:
+            with self.subTest(hour=hour):
+                self.set_hour(hour)
+                actual = self.greet()
+                self.assertEqual(actual, self.hello)
 
     def test_greet_should_trim_input(self):
         """
