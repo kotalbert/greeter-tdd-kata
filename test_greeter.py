@@ -13,6 +13,7 @@ class TestGreeter(unittest.TestCase):
     hello = f'Hello {name}'
     gm = f'Good morning {name}'
     ge = f'Good evening {name}'
+    gn = f'Good night {name}'
 
     def setUp(self) -> None:
         patcher = patch.object(Greeter, '_get_current_hour', return_value=-1)
@@ -23,6 +24,7 @@ class TestGreeter(unittest.TestCase):
         self.current_hour.return_value = hour
 
     def test_greet_should_say_hello(self):
+        # todo: replace with method
         actual = Greeter.greet(self.name)
         self.assertEqual(actual, self.hello)
 
@@ -44,3 +46,8 @@ class TestGreeter(unittest.TestCase):
         self.set_hour(20)
         actual = Greeter.greet(self.name)
         self.assertEqual(actual, self.ge)
+
+    def test_greet_should_say_good_night_at_night(self):
+        self.set_hour(2)
+        actual = Greeter.greet(self.name)
+        self.assertEqual(actual, self.gn)
