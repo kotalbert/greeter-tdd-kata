@@ -1,6 +1,6 @@
 import sys
 import unittest
-from typing import List
+from typing import List, Optional
 from unittest.mock import patch
 
 from greeter import Greeter
@@ -14,36 +14,40 @@ class TestGreeter(unittest.TestCase):
     gn = f'Good night {name}'
 
     def setUp(self) -> None:
-        patcher = patch.object(Greeter, '_get_current_hour', return_value=-1)
-        self.current_hour = patcher.start()
+        patcher = patch.object(Greeter, '_get_current_time', return_value=Greeter.parse_time('13:00'))
+        self.current_time = patcher.start()
         self.addCleanup(patcher.stop)
 
-    def greet(self):
-        """Helper to make greeting easier."""
+    def greet(self, time_s: Optional[str] = '00:00') -> str:
+        """
+        Helper to make greeting easier.
 
+        :param time_s: time string in format "%H:%M"
+        :returns: Greeter.greet for default name parameter on set time
+        """
+
+        self.current_time.return_value = Greeter.parse_time(time_s)
         return Greeter.greet(self.name)
 
-    def set_hour(self, hour: int):
-        """Helper to set mocked hour."""
+    def _test_greet_with_times_list(self, times: List[str], expected: str) -> None:
+        """
+        Helper to test range of times, with expected response.
 
-        # todo: add minute parameter
-        self.current_hour.return_value = hour
+        :param times: list of time strings in format "%H:%M"
+        """
 
-    @staticmethod
-    def get_hours_between(start, stop) -> List[int]:
-        return list(range(start, stop + 1))
+        assert len(times) > 0
+        for time in times:
+            with self.subTest(time=time):
+                self.assertEqual(self.greet(time), expected)
 
     def test_greet_should_say_hello(self):
         """
         Greeter.greet should say 'Hello'
         """
 
-        hours = TestGreeter.get_hours_between(14, 17)
-        for hour in hours:
-            with self.subTest(hour=hour):
-                self.set_hour(hour)
-                actual = self.greet()
-                self.assertEqual(actual, self.hello)
+        hours = ['12:01', '13:00', '17:59']
+        self._test_greet_with_times_list(hours, self.hello)
 
     def test_greet_should_trim_input(self):
         """
@@ -66,24 +70,26 @@ class TestGreeter(unittest.TestCase):
         Greeter.greet should say 'Good morning' in the morning (6:00-12:00)
         """
 
-        self.set_hour(10)
-        self.assertEqual(self.greet(), self.gm)
+        times = ['6:00', '9:00', '11:59']
+        self._test_greet_with_times_list(times, self.gm)
 
     def test_greet_should_say_good_evening_in_evening(self):
         """
         Greeter.greet should say 'Good evening' in the evening (18:00-22:00)
         """
 
-        self.set_hour(20)
-        self.assertEqual(self.greet(), self.ge)
+        times = ['18:00', '20:15', '21:59']
+        for time in times:
+            with self.subTest(time=time):
+                self.assertEqual(self.greet(time), self.ge)
 
     def test_greet_should_say_good_night_at_night(self):
         """
         Greeter.greet should say 'Good night' at night (22:00-6:00)
         """
 
-        self.set_hour(2)
-        self.assertEqual(self.greet(), self.gn)
+        times = ['22:00', '23:30', '5:59']
+        self._test_greet_with_times_list(times, self.gn)
 
     @patch.object(sys, 'stdout')
     def test_greet_should_log_to_console(self, mock_stdout):
