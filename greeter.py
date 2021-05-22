@@ -11,6 +11,8 @@ class Greeter:
             greeting = 'Good morning'
         elif Greeter._current_hour_between(18, 22):
             greeting = 'Good evening'
+        elif Greeter._current_hour_between(22, 6):
+            greeting = 'Good night'
 
         return f'{greeting} {name}'
 
@@ -24,6 +26,10 @@ class Greeter:
 
     @staticmethod
     def _current_hour_between(range_start: int, range_end: int) -> bool:
-        assert range_end >= range_start
+        hours_number = abs(range_start - range_end) + 1
+        clock_slice = [-1]*hours_number
+        for i in range(hours_number):
+            clock_slice[i] = (range_start + i) % 24
+
         ch = Greeter._get_current_hour()
-        return range_start < ch < range_end
+        return ch in clock_slice
