@@ -1,3 +1,4 @@
+import sys
 import unittest
 from unittest.mock import patch
 
@@ -73,3 +74,12 @@ class TestGreeter(unittest.TestCase):
 
         self.set_hour(2)
         self.assertEqual(self.greet(), self.gn)
+
+    @patch.object(sys, 'stdout')
+    def test_greet_should_log_to_console(self, mock_stdout):
+        """
+        Greeter.greet should log to console every time it is called.
+        """
+
+        self.greet()
+        self.assertTrue(mock_stdout.write.called)
