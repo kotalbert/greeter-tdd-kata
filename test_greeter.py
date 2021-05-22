@@ -1,47 +1,46 @@
 import unittest
-from unittest import mock
 from unittest.mock import Mock
-from greeter import Greeter
-import greeter
 from unittest.mock import patch
+
+import greeter
+from greeter import Greeter
 
 greeter.time = Mock()
 
 
 class TestGreeter(unittest.TestCase):
-    expected = 'Hello Albert'
+    name = 'Albert'
+    hello = f'Hello {name}'
+    gm = f'Good morning {name}'
+    ge = f'Good evening {name}'
 
     def setUp(self) -> None:
-        patcher = patch('greeter.time.localtime')
-        self.mock_localtime = patcher.start()
+        patcher = patch.object(Greeter, '_get_current_hour', return_value=-1)
+        self.current_hour = patcher.start()
         self.addCleanup(patcher.stop)
 
     def set_hour(self, hour: int):
-        self.mock_localtime.return_value.tm_hour = hour
+        self.current_hour.return_value = hour
 
     def test_greet_should_say_hello(self):
-        actual = Greeter.greet('Albert')
-        self.assertEqual(actual, self.expected)
+        actual = Greeter.greet(self.name)
+        self.assertEqual(actual, self.hello)
 
     def test_greet_should_trim_input(self):
-        actual = Greeter.greet('   Albert   ')
-        self.assertEqual(actual, self.expected)
+        actual = Greeter.greet(f'   {self.name}   ')
+        self.assertEqual(actual, self.hello)
 
     def test_greet_should_capitalize_input(self):
-        actual = Greeter.greet('albert')
-        self.assertEqual(actual, self.expected)
+        actual = Greeter.greet(self.name.lower())
+        self.assertEqual(actual, self.hello)
 
     def test_greet_should_say_good_morning(self):
         self.set_hour(10)
 
-        actual = Greeter.greet('Albert')
-        expected = 'Good morning Albert'
-        self.assertEqual(actual, expected)
+        actual = Greeter.greet(self.name)
+        self.assertEqual(actual, self.gm)
 
     def test_greet_should_say_good_evening_in_evening(self):
         self.set_hour(20)
-        # todo: refactor name as class var
-        actual = Greeter.greet('Albert')
-        expected = 'Good evening Albert'
-        self.assertEqual(actual, expected)
-
+        actual = Greeter.greet(self.name)
+        self.assertEqual(actual, self.ge)
