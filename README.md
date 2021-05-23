@@ -11,3 +11,10 @@ All tests should always pass, regardless of environment conditions.
 7. `greet` logs into console each time it is called
 
 source: https://raw.githubusercontent.com/wix/tdd-katas/
+
+# Lessons Learned:
+
+1. You should write more than minimal test in RED phase.
+2. Comprehensive tests, covering more than trivial example should be written in early phase. 
+3. Specification can be inferred from well-defined tests.
+4. Test should cover edge cases.
