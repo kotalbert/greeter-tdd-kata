@@ -10,7 +10,7 @@ All tests should always pass, regardless of environment conditions.
 6. `greet` returns `Good night <name>` when the time is 22:00-06:00
 7. `greet` logs into console each time it is called
 
-source: https://raw.githubusercontent.com/wix/tdd-katas/
+source: https://github.com/wix/tdd-katas
 
 # Lessons Learned:
 
